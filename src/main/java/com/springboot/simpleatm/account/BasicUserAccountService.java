@@ -22,15 +22,16 @@ public class BasicUserAccountService implements UserAccountService {
     }
 
     @Override
-    public void deposit(String accountNumber, double amount) {
+    public UserAccount deposit(String accountNumber, double amount) throws UserAccountNotFoundException, InvalidAmountException {
         UserAccount userAccount = findAccountByNumber(accountNumber);
         validateAmount(amount);
         double newBalance = userAccount.getBalance() + amount;
         updateBalance(userAccount, newBalance);
+        return userAccount;
     }
 
     @Override
-    public synchronized double withdraw(String accountNumber, double amount) {
+    public UserAccount withdraw(String accountNumber, double amount) throws UserAccountNotFoundException, InvalidAmountException, InsufficientBalanceException {
         UserAccount userAccount = findAccountByNumber(accountNumber);
         validateAmount(amount);
         double currentBalance = userAccount.getBalance();
@@ -39,16 +40,15 @@ public class BasicUserAccountService implements UserAccountService {
         }
         double newBalance = currentBalance - amount;
         updateBalance(userAccount, newBalance);
-        return amount;
+        return userAccount;
     }
 
     @Override
-    public double viewBalance(String accountNumber) {
-        UserAccount userAccount = findAccountByNumber(accountNumber);
-        return userAccount.getBalance();
+    public UserAccount getAccountDetails(String accountNumber) throws UserAccountNotFoundException {
+        return findAccountByNumber(accountNumber);
     }
 
-    private UserAccount findAccountByNumber(String accountNumber) {
+    private UserAccount findAccountByNumber(String accountNumber) throws UserAccountNotFoundException {
         // premise: the account numbers are unique
         Optional<UserAccount> optional = userAccountRepository.findOne(filterByAccountNumber(accountNumber));
         if (!optional.isPresent()) {
@@ -62,7 +62,7 @@ public class BasicUserAccountService implements UserAccountService {
         userAccountRepository.save(userAccount);
     }
 
-    private void validateAmount(double amount) {
+    private void validateAmount(double amount) throws InvalidAmountException {
         if (amount <= 0) {
             throw new InvalidAmountException("amount: " + amount);
         }

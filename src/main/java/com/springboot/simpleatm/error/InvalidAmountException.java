@@ -1,6 +1,6 @@
 package com.springboot.simpleatm.error;
 
-public class InvalidAmountException extends RuntimeException {
+public class InvalidAmountException extends Exception {
     public InvalidAmountException(String message) {
 
     }

@@ -16,11 +16,4 @@ public class UserAccount {
     private String accountNumber;
     private String pinHash;
     private Double balance;
-
-    public UserAccount(String name, String accountNumber, String pinHash, Double balance) {
-        this.name = name;
-        this.accountNumber = accountNumber;
-        this.pinHash = pinHash;
-        this.balance = balance;
-    }
 }
