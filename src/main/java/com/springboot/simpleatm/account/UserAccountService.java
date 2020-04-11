@@ -1,4 +1,4 @@
-package com.springboot.simpleatm.service;
+package com.springboot.simpleatm.account;
 
 import org.springframework.stereotype.Service;
 

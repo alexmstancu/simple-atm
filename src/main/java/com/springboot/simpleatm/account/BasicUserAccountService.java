@@ -1,22 +1,21 @@
-package com.springboot.simpleatm.service;
+package com.springboot.simpleatm.account;
 
 import com.springboot.simpleatm.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultUserAccountService implements UserAccountService {
+public class BasicUserAccountService implements UserAccountService {
 
     private UserAccountRepository userAccountRepository;
 
     @Autowired
-    public DefaultUserAccountService(UserAccountRepository userAccountRepository) {
+    public BasicUserAccountService(UserAccountRepository userAccountRepository) {
         this.userAccountRepository = userAccountRepository;
     }
 
     @Override
     public void deposit(String accountNumber, double amount) {
-
     }
 
     @Override

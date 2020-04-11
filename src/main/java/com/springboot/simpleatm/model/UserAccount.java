@@ -1,15 +1,13 @@
 package com.springboot.simpleatm.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "user_account")
-@Getter @Setter @NoArgsConstructor
+@Data
 public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
