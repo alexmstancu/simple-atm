@@ -3,7 +3,6 @@ package com.springboot.simpleatm.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "user_account")

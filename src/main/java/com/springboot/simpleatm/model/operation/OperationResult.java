@@ -7,12 +7,12 @@ import lombok.Data;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserAccountOperationResult {
-    private String accountNumber;
-    private String name;
-    private Double currentBalance;
-    private Double operatedAmount;
+public class OperationResult {
     private String operationType;
     private String operationStatus;
     private String error;
+    private Double operatedAmount;
+    private Double currentBalance;
+    private String accountNumber;
+    private String holderName;
 }

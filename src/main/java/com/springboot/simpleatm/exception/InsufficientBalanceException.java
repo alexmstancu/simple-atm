@@ -1,4 +1,4 @@
-package com.springboot.simpleatm.error;
+package com.springboot.simpleatm.exception;
 
 public class InsufficientBalanceException extends Exception {
     public InsufficientBalanceException(String message) {
