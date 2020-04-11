@@ -15,14 +15,14 @@ public class Account {
     private String id;
     private String name;
     @Column(name = "card_number")
-    private String cardNumber;
+    private String accountNumber;
     @Column(name = "pin_hash")
     private String pinHash;
     private BigDecimal balance;
 
-    public Account(String name, String cardNumber, String pinHash, BigDecimal balance) {
+    public Account(String name, String accountNumber, String pinHash, BigDecimal balance) {
         this.name = name;
-        this.cardNumber = cardNumber;
+        this.accountNumber = accountNumber;
         this.pinHash = pinHash;
         this.balance = balance;
     }
