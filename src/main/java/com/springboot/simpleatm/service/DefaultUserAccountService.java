@@ -1,15 +1,17 @@
 package com.springboot.simpleatm.service;
 
-import com.springboot.simpleatm.repository.AccountRepository;
+import com.springboot.simpleatm.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class DefaultAccountService implements AccountService {
+@Service
+public class DefaultUserAccountService implements UserAccountService {
 
-    private AccountRepository accountRepository;
+    private UserAccountRepository userAccountRepository;
 
     @Autowired
-    public DefaultAccountService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
+    public DefaultUserAccountService(UserAccountRepository userAccountRepository) {
+        this.userAccountRepository = userAccountRepository;
     }
 
     @Override

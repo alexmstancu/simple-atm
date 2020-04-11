@@ -8,8 +8,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "user_account")
 @Getter @Setter @NoArgsConstructor
-public class Account {
+public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
@@ -20,7 +21,7 @@ public class Account {
     private String pinHash;
     private BigDecimal balance;
 
-    public Account(String name, String accountNumber, String pinHash, BigDecimal balance) {
+    public UserAccount(String name, String accountNumber, String pinHash, BigDecimal balance) {
         this.name = name;
         this.accountNumber = accountNumber;
         this.pinHash = pinHash;

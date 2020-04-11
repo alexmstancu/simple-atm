@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS user_account;
 
-CREATE TABLE accounts (
+CREATE TABLE user_account (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   account_number VARCHAR(5) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE accounts (
   balance DECIMAL(15, 2) NOT NULL
 );
 
-INSERT INTO accounts (name, account_number, pin_hash, balance) VALUES
+INSERT INTO user_account (name, account_number, pin_hash, balance) VALUES
   ('alex', '11111', 'TODO', 500.12),
   ('george', '22222', 'TODO', 100),
   ('andreea', '33333', 'TODO', 200),

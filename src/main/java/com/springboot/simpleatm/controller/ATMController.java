@@ -1,6 +1,6 @@
 package com.springboot.simpleatm.controller;
 
-import com.springboot.simpleatm.service.AccountService;
+import com.springboot.simpleatm.service.UserAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class ATMController {
     Logger logger = LoggerFactory.getLogger(ATMController.class);
 
-    private AccountService accountService;
+    private UserAccountService userAccountService;
 
     public void login(String cardNumber, String pin) {
 
