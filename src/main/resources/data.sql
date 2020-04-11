@@ -1,13 +1,16 @@
-DROP TABLE IF EXISTS billionaires;
+DROP TABLE IF EXISTS accounts;
 
-CREATE TABLE billionaires (
+CREATE TABLE accounts (
   id INT AUTO_INCREMENT  PRIMARY KEY,
   first_name VARCHAR(250) NOT NULL,
   last_name VARCHAR(250) NOT NULL,
-  career VARCHAR(250) DEFAULT NULL
+  card_number VARCHAR(250) NOT NULL,
+  pin_hash VARCHAR(250) NOT NULL,
+  balance DOUBLE(15, 2)
 );
 
-INSERT INTO billionaires (first_name, last_name, career) VALUES
-  ('Aliko', 'Dangote', 'Billionaire Industrialist'),
+INSERT INTO accounts (first_name, last_name, card_number, pin_hash, balance) VALUES
+--
+  ('Alex', 'Stancu', 'Billionaire Industrialist'),
   ('Bill', 'Gates', 'Billionaire Tech Entrepreneur'),
   ('Folrunsho', 'Alakija', 'Billionaire Oil Magnate');
