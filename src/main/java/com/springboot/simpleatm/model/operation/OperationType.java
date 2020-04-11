@@ -1,4 +1,4 @@
-package com.springboot.simpleatm.model;
+package com.springboot.simpleatm.model.operation;
 
 public enum OperationType {
     accountDetails,

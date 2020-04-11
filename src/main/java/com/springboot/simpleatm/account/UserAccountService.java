@@ -6,7 +6,7 @@ import com.springboot.simpleatm.error.UserAccountNotFoundException;
 import com.springboot.simpleatm.model.UserAccount;
 
 public interface UserAccountService {
-    public UserAccount deposit(String accountNumber, double amount) throws UserAccountNotFoundException, InvalidAmountException;
-    public UserAccount withdraw(String accountNumber, double amount) throws UserAccountNotFoundException, InvalidAmountException, InsufficientBalanceException;
-    public UserAccount getAccountDetails(String accountNumber) throws UserAccountNotFoundException;
+    UserAccount deposit(String accountNumber, double amount) throws UserAccountNotFoundException, InvalidAmountException;
+    UserAccount withdraw(String accountNumber, double amount) throws UserAccountNotFoundException, InvalidAmountException, InsufficientBalanceException;
+    UserAccount fetchAccountDetails(String accountNumber) throws UserAccountNotFoundException;
 }

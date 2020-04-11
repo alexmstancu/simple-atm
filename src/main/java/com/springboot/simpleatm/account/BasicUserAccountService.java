@@ -44,7 +44,7 @@ public class BasicUserAccountService implements UserAccountService {
     }
 
     @Override
-    public UserAccount getAccountDetails(String accountNumber) throws UserAccountNotFoundException {
+    public UserAccount fetchAccountDetails(String accountNumber) throws UserAccountNotFoundException {
         return findAccountByNumber(accountNumber);
     }
 
