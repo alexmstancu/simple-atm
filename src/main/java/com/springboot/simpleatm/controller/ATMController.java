@@ -19,16 +19,16 @@ public class ATMController {
 
     @GetMapping("/balance")
     public void getBalance() {
-
+        logger.debug("getBalance called");
     }
 
     @PostMapping("/withdraw")
     public void withdraw() {
-
+        logger.debug("withdraw called");
     }
 
     @PostMapping("deposit")
     public void deposit() {
-
+        logger.debug("deposit called");
     }
 }

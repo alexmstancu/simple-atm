@@ -13,13 +13,11 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String name;
-    @Column(name = "card_number")
     private String accountNumber;
-    @Column(name = "pin_hash")
     private String pinHash;
-    private BigDecimal balance;
+    private Double balance;
 
-    public UserAccount(String name, String accountNumber, String pinHash, BigDecimal balance) {
+    public UserAccount(String name, String accountNumber, String pinHash, Double balance) {
         this.name = name;
         this.accountNumber = accountNumber;
         this.pinHash = pinHash;
