@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 public class SimpleAtmApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(SimpleAtmApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SimpleAtmApplication.class, args);
+    }
 }

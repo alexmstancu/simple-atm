@@ -23,8 +23,8 @@ public class BasicUserAccountService implements UserAccountService {
 
     @Override
     public UserAccount deposit(String accountNumber, Double amount) throws UserAccountNotFoundException, InvalidAmountException {
-        UserAccount userAccount = findAccountByNumber(accountNumber);
         validateAmount(amount);
+        UserAccount userAccount = findAccountByNumber(accountNumber);
         double newBalance = userAccount.getBalance() + amount;
         updateBalance(userAccount, newBalance);
         return userAccount;
@@ -32,8 +32,8 @@ public class BasicUserAccountService implements UserAccountService {
 
     @Override
     public UserAccount withdraw(String accountNumber, Double amount) throws UserAccountNotFoundException, InvalidAmountException, InsufficientBalanceException {
-        UserAccount userAccount = findAccountByNumber(accountNumber);
         validateAmount(amount);
+        UserAccount userAccount = findAccountByNumber(accountNumber);
         double currentBalance = userAccount.getBalance();
         if (currentBalance < amount) {
             throw new InsufficientBalanceException("current balance: " + currentBalance + ", amount to be withdrawn: " + amount);
