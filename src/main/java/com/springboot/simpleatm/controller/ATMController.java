@@ -14,17 +14,17 @@ public class ATMController {
 
     }
 
-    @GetMapping
+    @GetMapping("/balance")
     public void getBalance() {
 
     }
 
-    @PostMapping
+    @PostMapping("/withdraw")
     public void withdraw() {
 
     }
 
-    @PostMapping
+    @PostMapping("deposit")
     public void deposit() {
 
     }
