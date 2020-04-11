@@ -1,16 +1,15 @@
-DROP TABLE IF EXISTS accounts;
+--DROP TABLE IF EXISTS accounts;
 
 CREATE TABLE accounts (
-  id INT AUTO_INCREMENT  PRIMARY KEY,
-  first_name VARCHAR(250) NOT NULL,
-  last_name VARCHAR(250) NOT NULL,
-  card_number VARCHAR(250) NOT NULL,
-  pin_hash VARCHAR(250) NOT NULL,
-  balance DOUBLE(15, 2)
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  card_number VARCHAR(5) NOT NULL,
+  pin_hash VARCHAR(256) NOT NULL,
+  balance DOUBLE(15, 2) NOT NULL
 );
 
-INSERT INTO accounts (first_name, last_name, card_number, pin_hash, balance) VALUES
---
-  ('Alex', 'Stancu', 'Billionaire Industrialist'),
-  ('Bill', 'Gates', 'Billionaire Tech Entrepreneur'),
-  ('Folrunsho', 'Alakija', 'Billionaire Oil Magnate');
+--INSERT INTO accounts (name, card_number, pin_hash, balance) VALUES
+--  ('alex', '11111', 'TODO', 500.12),
+--  ('george', '22222', 'TODO', 100),
+--  ('andreea', '33333', 'TODO', 200),
+--  ('alina', '55555', 'TODO', 2.14);

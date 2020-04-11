@@ -1,4 +1,10 @@
 package com.springboot.simpleatm.repository;
 
-public class AccountRepository {
+import com.springboot.simpleatm.model.Account;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Integer> {
+
 }
