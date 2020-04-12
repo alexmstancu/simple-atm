@@ -113,4 +113,4 @@ The REST endpoints will do different sorts of validation (such as checking if th
     ```
     * if the amount is invalid/accoutn does not exist/the user is not authenticated, error HTTP code & error messages will be returned
 
-It does not mimic real life that well, because it is some sort of a mix between an ATM (client) and an API(server). Normally this is how I image a correct flow: the ATM is a client which the user is using to make requests to the bank API server. But in my app, the ATM is also the API server.
+It does not mimic real life that well, because it is some sort of a mix between an ATM (client) and a bank API (server). Normally this is how I image a correct flow: the ATM is a client which the user is using to make requests to the bank API server. But in my app, the ATM is also the API server.
