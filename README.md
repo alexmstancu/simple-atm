@@ -5,7 +5,7 @@ Spring Boot based ATM API simulator.
 
 Basic ATM API with very basic authentication. There are 4 operations supported:
 * authentication (with credentials being accountNumber & pin)
-* see the account's details (account holder name, balance, account number(
+* see the account's details (account holder name, balance, account number)
 * withdraw an amount from an account
 * deposit an amount into an account
 
