@@ -25,7 +25,7 @@ public class BasicUserAccountService implements UserAccountService {
     public UserAccount deposit(String accountNumber, Double amount) throws UserAccountNotFoundException, InvalidAmountException {
         validateAmount(amount);
         UserAccount userAccount = findAccountByNumber(accountNumber);
-        double newBalance = userAccount.getBalance() + amount;
+        Double newBalance = userAccount.getBalance() + amount;
         updateBalance(userAccount, newBalance);
         return userAccount;
     }
@@ -34,11 +34,11 @@ public class BasicUserAccountService implements UserAccountService {
     public UserAccount withdraw(String accountNumber, Double amount) throws UserAccountNotFoundException, InvalidAmountException, InsufficientBalanceException {
         validateAmount(amount);
         UserAccount userAccount = findAccountByNumber(accountNumber);
-        double currentBalance = userAccount.getBalance();
+        Double currentBalance = userAccount.getBalance();
         if (currentBalance < amount) {
-            throw new InsufficientBalanceException("current balance: " + currentBalance + ", amount to be withdrawn: " + amount);
+            throw new InsufficientBalanceException(currentBalance, amount);
         }
-        double newBalance = currentBalance - amount;
+        Double newBalance = currentBalance - amount;
         updateBalance(userAccount, newBalance);
         return userAccount;
     }
@@ -51,23 +51,17 @@ public class BasicUserAccountService implements UserAccountService {
     private UserAccount findAccountByNumber(String accountNumber) throws UserAccountNotFoundException {
         // premise: the account numbers are unique
         Optional<UserAccount> optional = userAccountRepository.findOne(filterByAccountNumber(accountNumber));
-        if (!optional.isPresent()) {
-            throw new UserAccountNotFoundException("account number: " + accountNumber);
-        }
-        return optional.get();
+        return optional.orElseThrow(() -> new UserAccountNotFoundException(accountNumber));
     }
 
-    private void updateBalance(UserAccount userAccount, double newBalance) {
+    private void updateBalance(UserAccount userAccount, Double newBalance) {
         userAccount.setBalance(newBalance);
         userAccountRepository.save(userAccount);
     }
 
     private void validateAmount(Double amount) throws InvalidAmountException {
-        if (amount == null) {
-            throw new InvalidAmountException("amount cannot be null");
-        }
-        if (amount <= 0) {
-            throw new InvalidAmountException("amount: " + amount);
+        if (amount == null || amount <= 0) {
+            throw new InvalidAmountException(amount);
         }
     }
 }

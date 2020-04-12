@@ -1,7 +1,7 @@
 package com.springboot.simpleatm.exception;
 
 public class InvalidAmountException extends Exception {
-    public InvalidAmountException(String message) {
-        super(message);
+    public InvalidAmountException(Double amount) {
+        super("amount must not be null, nor less than or equal to 0; amount: " + amount);
     }
 }
