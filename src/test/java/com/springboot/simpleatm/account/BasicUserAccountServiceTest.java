@@ -152,12 +152,12 @@ public class BasicUserAccountServiceTest {
     }
 
     private UserAccount createUserAccount() {
-        return UserAccount.builder()
-                .accountNumber(ACCOUNT_NUMBER)
-                .balance(INITIAL_BALANCE)
-                .name("dummy")
-                .pin("1234")
-                .id("someId")
-                .build();
+        UserAccount account = new UserAccount();
+        account.setAccountNumber(ACCOUNT_NUMBER);
+        account.setBalance(INITIAL_BALANCE);
+        account.setName("dummy");
+        account.setPin("1234");
+        account.setId("someId");
+        return account;
     }
 }

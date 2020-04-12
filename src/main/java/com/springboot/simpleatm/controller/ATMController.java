@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Basic ATM API with very basic authentication. There are 4 operations supported:
  * 1. authentication (with credentials being accountNumber & pin)
- * 2. see the account's details (account holder name, balance, account number(
+ * 2. see the account's details (account holder name, balance, account number)
  * 3. withdraw an amount from an account
  * 4. deposit an amount into an account
  * Operations 2, 3, 4 are not allowed to be carried out without first authenticating into the system.

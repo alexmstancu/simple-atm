@@ -1,7 +1,7 @@
 package com.springboot.simpleatm.model;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user_account")
 @Data
-@Builder
+@NoArgsConstructor
 public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
