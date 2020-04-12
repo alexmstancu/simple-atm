@@ -70,7 +70,7 @@ The account_number is a string and the balance is a double.
 	* the request body should be empty
 	* the account number for the DB must be present in the URL: `http://localhost:8080/atm/userAccount/11111/details`
 	* if you are authenticated, the response will be in the following format:
-    ```
+	```
 	{
 		"operationType": "accountDetails",
 		"currentBalance": 500.12,
