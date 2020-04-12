@@ -51,7 +51,7 @@ The account_number is a string and the balance is a double.
 
 ### REST endpoints:
 
-The REST endpoints will do different sorts of validation (such as checking if the account number is existing in the DB before doing an operation, or if the amount to be withdraw is valid, or if the user is atuhenticated before doing an operation etc) and in case one of these validation rules is broken, an error HTTP status code will be returned together with a meaningful error message in the response body which states what was the problem with the request (e.g. for a "withdraw" request with an invalid amount, ```"error": "invalid amount, must be nonnull and strictly greater than 0"``` will be in the response
+The REST endpoints will do different sorts of validation (such as checking if the account number is existing in the DB before doing an operation, or if the amount to be withdraw is valid, or if the user is atuhenticated before doing an operation etc) and in case one of these validation rules is broken, an error HTTP status code will be returned together with a meaningful error message in the response body which states what was the problem with the request (e.g. for a "withdraw" request with an invalid amount, ```"error": "invalid amount, must be nonnull and strictly greater than 0"``` will be in the response. Also, for all such unsuccesful events, debug messages will be logged in the java app (as well as for successful events).
 
 
 1. Authentication: **POST** `http://localhost:8080/atm/userAccount/auth`
@@ -82,9 +82,9 @@ The REST endpoints will do different sorts of validation (such as checking if th
 	}
 	``` 
     * if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
-3. Withdraw: **POST** http://localhost:8080/atm/userAccount/11111/withdraw
+3. Withdraw: **POST** `http://localhost:8080/atm/userAccount/{accountNumber}/withdraw`
     * note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED with an error message in the response
-    * when you call the endpoint, the request body should contain the following payload:
+    * the account number for the DB must be present in the URL and the request body should contain the following payload:
     ```
     {
         "amount": 100,
@@ -101,3 +101,16 @@ The REST endpoints will do different sorts of validation (such as checking if th
     ```
     * if the amount is null or zero or negative, response status will be 400 and an error message returned as response body
     * if currentBalance < amount, response status will be 400 and an error message returned as response body
+4. Deposit: **POST** http://localhost:8080/atm/userAccount/{accountNumber}/deposit`
+   * similar behavior to the 'withdraw' endpoint
+   * if everything goes as expected, the response should be in the following format:
+   ```
+    {
+        "operationType": "deposit",
+        "operatedAmount": 100.0,
+        "currentBalance": 600.12
+    }
+    ```
+    * if the amount is invalid/accoutn does not exist/the user is not authenticated, error HTTP code & error messages will be returned
+
+It does not mimic real life that well, because it is some sort of a mix between an ATM (client) and an API(server). Normally this is how I image a correct flow: the ATM is a client which the user is using to make requests to the bank API server. But in my app, the ATM is also the API server.
