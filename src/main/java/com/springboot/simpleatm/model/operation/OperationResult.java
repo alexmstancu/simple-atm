@@ -9,7 +9,6 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OperationResult {
     private String operationType;
-    private String operationStatus;
     private String error;
     private Double operatedAmount;
     private Double currentBalance;
