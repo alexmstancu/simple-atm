@@ -19,6 +19,17 @@ public class BasicUserAccountService implements UserAccountService {
         this.userAccountRepository = userAccountRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public UserAccount fetchAccountDetails(String accountNumber) throws UserAccountNotFoundException {
+        return findAccountByNumber(accountNumber);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserAccount deposit(String accountNumber, Double amount) throws UserAccountNotFoundException, InvalidAmountException {
         validateAmount(amount);
@@ -28,6 +39,9 @@ public class BasicUserAccountService implements UserAccountService {
         return userAccount;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserAccount withdraw(String accountNumber, Double amount) throws UserAccountNotFoundException, InvalidAmountException, InsufficientBalanceException {
         validateAmount(amount);
@@ -39,11 +53,6 @@ public class BasicUserAccountService implements UserAccountService {
         Double newBalance = currentBalance - amount;
         updateBalance(userAccount, newBalance);
         return userAccount;
-    }
-
-    @Override
-    public UserAccount fetchAccountDetails(String accountNumber) throws UserAccountNotFoundException {
-        return findAccountByNumber(accountNumber);
     }
 
     private UserAccount findAccountByNumber(String accountNumber) throws UserAccountNotFoundException {
