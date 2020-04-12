@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * While a user is authenticated into the ATM with his accountNumber & pin, another user trying to authenticate
  * with the same credentials will not be permitted. A single user of an account is allowed to be logged into the system.
  *
+ * See {@link RestControllerExceptionHandler} for exception handling.
  */
 @CrossOrigin
 @RestController
