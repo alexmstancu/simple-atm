@@ -25,6 +25,8 @@ The app exposes a REST endpoint for each of the 4 operations.
 3. springboot as web framework
 4. H2 in memory db
 5. junit & jmockit for testing 
+6. lombok for getter/setters
+7. slf4j for logging (default configuration) 
 
 ## Running the app (win 10)
 
@@ -37,7 +39,7 @@ The app exposes a REST endpoint for each of the 4 operations.
 ## Trying out the app
 
 There are a few users accounts already setup into the DB. Use them to test the app.
-The app does not offer you a way to create/delete users, it relies on the idea they are already present, created by some other system/API beforehand. Here they are:
+The app does not offer you a way to create/delete users, it relies on the idea they are already present, created by some other system/API beforehand. Here they are (this is actually the DB schema, sand the auto-generated id, which is not used in the app):
 ```
    name,       account_number, pin,   balance)
   ('alex',    '11111',        '1234', 500.12),
@@ -48,7 +50,8 @@ The app does not offer you a way to create/delete users, it relies on the idea t
 The account_number is a string and the balance is a double.
 
 ### REST endpoints:
-**POST** `http://localhost:8080/atm/userAccount/auth`
+
+1. Authentication: **POST** `http://localhost:8080/atm/userAccount/auth`
    * this will authenticate you as a user into the ATM system
    * you need to provide the credentials as a request body, for example, for the user 'alex':
    ```
@@ -61,4 +64,18 @@ The account_number is a string and the balance is a double.
    * if the account is existing & the pin is incorrect, the response body contains an error message and status code is 401 UNAUTHORIZED
    * if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
    * if the account is existing & the pin is correct, but you were already authenticated, the response body contains an error message and status code is 401 UNAUTHORIZED
+   * once you are authenticated, you will be further allowed to do a single operations out of the 3 remaining operations, after which you will not be authenticated any more. you will have to re-authenticate, by calling this endpoint, if you want to make other operations.
+2. Account details: **GET** `http://localhost:8080/atm/userAccount/{accountNumber}/details`
+	* note: you need to first authenticate in order to call this endpoint
+	* the request body should be empty
+	* the account number for the DB must be present in the URL: `http://localhost:8080/atm/userAccount/11111/details`
+	* if you are authenticated, the response will be in the following format:
+    ```
+	{
+		"operationType": "accountDetails",
+		"currentBalance": 500.12,
+		"accountNumber": "11111",
+		"holderName": "alex"
+	}
+	```
 
