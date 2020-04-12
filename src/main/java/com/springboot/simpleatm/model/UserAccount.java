@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * The model stored in the DB (this is the only DB entity).
+ */
 @Entity
 @Table(name = "user_account")
 @Data
@@ -14,7 +17,6 @@ public class UserAccount {
     private String name;
     @Column(name = "account_number")
     private String accountNumber;
-    @Column(name = "pin_hash")
-    private String pinHash;
+    private String pin;
     private Double balance;
 }
