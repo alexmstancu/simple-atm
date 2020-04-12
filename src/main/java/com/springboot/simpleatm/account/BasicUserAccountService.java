@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.springboot.simpleatm.repository.UserAccountRepository.filterByAccountNumber;
-
 @Service
 public class BasicUserAccountService implements UserAccountService {
     private final UserAccountRepository userAccountRepository;
@@ -50,7 +48,7 @@ public class BasicUserAccountService implements UserAccountService {
 
     private UserAccount findAccountByNumber(String accountNumber) throws UserAccountNotFoundException {
         // premise: the account numbers are unique
-        Optional<UserAccount> optional = userAccountRepository.findOne(filterByAccountNumber(accountNumber));
+        Optional<UserAccount> optional = Optional.ofNullable(userAccountRepository.findByAccountNumber(accountNumber));
         return optional.orElseThrow(() -> new UserAccountNotFoundException(accountNumber));
     }
 
