@@ -1,6 +1,9 @@
 # simple-atm
 Spring Boot based ATM simulator
 
-# Running the app (win 10)
+## About
 
-`mvnw clean install`
+## Running the app (win 10)
+
+1. `mvnw clean install`
+2. `mvn spring-boot:run`
