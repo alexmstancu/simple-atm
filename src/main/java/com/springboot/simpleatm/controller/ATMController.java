@@ -45,7 +45,7 @@ public class ATMController {
     public OperationResult withdraw(@PathVariable String accountNumber, @RequestBody OperationPayload payload) {
         Double amount = payload.getAmount();
 
-        logger.debug("Requesting withdrawal with amount {} in currency {} for account number {}", amount, payload.getCurrency(), accountNumber);
+        logger.debug("Requesting withdrawal with amount {} for account number {}", amount, accountNumber);
         UserAccount account = userAccountService.withdraw(accountNumber, amount);
         logger.debug("Withdrawal successful with amount {} for account number {}, current balance {}", amount, accountNumber, account.getBalance());
 
@@ -60,7 +60,7 @@ public class ATMController {
     public OperationResult deposit(@PathVariable String accountNumber, @RequestBody OperationPayload payload) {
         Double amount = payload.getAmount();
 
-        logger.debug("Requesting deposit with amount {} in currency {} for account number {}", amount, payload.getCurrency(), accountNumber);
+        logger.debug("Requesting deposit with amount {} for account number {}", amount, accountNumber);
         UserAccount account = userAccountService.deposit(accountNumber, amount);
         logger.debug("Deposit successful with amount {} for account number {}, current balance {}", amount, accountNumber, account.getBalance());
 
