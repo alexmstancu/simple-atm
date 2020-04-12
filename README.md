@@ -17,6 +17,8 @@ he will be 'deauthenticated' automatically (most ATMs function like that, or at 
 While a user is authenticated into the ATM with his accountNumber & pin, another user trying to authenticate
 with the same credentials will not be permitted. A single user of an account is allowed to be logged into the system.
 
+The app exposes a REST endpoint for each of the 4 operations.
+
 ## Tech stack
 1. maven as build tool
 2. java 8
@@ -31,3 +33,15 @@ with the same credentials will not be permitted. A single user of an account is 
 3. `mvnw clean install`
 4. `mvnw spring-boot:run`
 5. the web app will start on `http://localhost:8080`
+
+## Trying out the app
+
+There are a few users accounts already setup into the DB. Use them to test the app.
+The app does not offer you a way to create/delete users, it relies on the idea they are already present, created by some other system/API beforehand.
+```
+INSERT INTO user_account (name, account_number, pin, balance) VALUES
+  ('alex', '11111', '1234', 500.12),
+  ('george', '22222', '0000', 10000),
+  ('andreea', '33333', '8080', 2500),
+  ('alina', '55555', '5555', 3.14);
+```
