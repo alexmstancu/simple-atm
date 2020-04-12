@@ -1,8 +1,6 @@
 package com.springboot.simpleatm.controller;
 
-import com.springboot.simpleatm.exception.InsufficientBalanceException;
-import com.springboot.simpleatm.exception.InvalidAmountException;
-import com.springboot.simpleatm.exception.UserAccountNotFoundException;
+import com.springboot.simpleatm.exception.*;
 import com.springboot.simpleatm.model.operation.OperationErrorMessage;
 import com.springboot.simpleatm.model.operation.OperationResult;
 import org.slf4j.Logger;
@@ -20,7 +18,7 @@ public class RestControllerExceptionHandler {
     public ResponseEntity<OperationResult> handleUserNotFound(UserAccountNotFoundException e) {
         String accountNumber = e.getAccountNumber();
 
-        logger.error("Account number {} not found.", accountNumber, e);
+        logger.error("Account number '{}' not found.", accountNumber, e);
 
         OperationResult operationResult = OperationResult.builder()
                 .error(OperationErrorMessage.ACCOUNT_NOT_FOUND)
@@ -58,5 +56,16 @@ public class RestControllerExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(operationResult, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({UserAlreadyAuthenticatedException.class, UserAccountPinIncorrectException.class, UserUnauthenticatedException.class})
+    public ResponseEntity<OperationResult> handleSecurity(RuntimeException e) {
+        logger.error("User could not be authenticated for the requested operation: ", e);
+
+        OperationResult operationResult = OperationResult.builder()
+                .error(e.getMessage())
+                .build();
+
+        return new ResponseEntity<>(operationResult, HttpStatus.UNAUTHORIZED);
     }
 }
