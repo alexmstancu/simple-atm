@@ -51,6 +51,9 @@ The account_number is a string and the balance is a double.
 
 ### REST endpoints:
 
+The REST endpoints will do different sorts of validation (such as checking if the account number is existing in the DB before doing an operation, or if the amount to be withdraw is valid, or if the user is atuhenticated before doing an operation etc) and in case one of these validation rules is broken, an error HTTP status code will be returned together with a meaningful error message in the response body which states what was the problem with the request (e.g. for a "withdraw" request with an invalid amount, ```"error": "invalid amount, must be nonnull and strictly greater than 0"``` will be in the response
+
+
 1. Authentication: **POST** `http://localhost:8080/atm/userAccount/auth`
    * this will authenticate you as a user into the ATM system
    * you need to provide the credentials as a request body, for example, for the user 'alex':
@@ -66,16 +69,35 @@ The account_number is a string and the balance is a double.
    * if the account is existing & the pin is correct, but you were already authenticated, the response body contains an error message and status code is 401 UNAUTHORIZED
    * once you are authenticated, you will be further allowed to do a single operations out of the 3 remaining operations, after which you will not be authenticated any more. you will have to re-authenticate, by calling this endpoint, if you want to make other operations.
 2. Account details: **GET** `http://localhost:8080/atm/userAccount/{accountNumber}/details`
-	* note: you need to first authenticate in order to call this endpoint
-	* the request body should be empty
+	* note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED with an error message in the response
+	* when you call the endpoint, the request body should be empty
 	* the account number for the DB must be present in the URL: `http://localhost:8080/atm/userAccount/11111/details`
 	* if you are authenticated, the response will be in the following format:
 	```
 	{
-		"operationType": "accountDetails",
-		"currentBalance": 500.12,
-		"accountNumber": "11111",
-		"holderName": "alex"
+        "operationType": "accountDetails",
+        "currentBalance": 500.12,
+        "accountNumber": "11111",
+        "holderName": "alex"
 	}
-	```
-
+	``` 
+    * if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
+3. Withdraw: **POST** http://localhost:8080/atm/userAccount/11111/withdraw
+    * note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED with an error message in the response
+    * when you call the endpoint, the request body should contain the following payload:
+    ```
+    {
+        "amount": 100,
+        "currency": "RON"
+    }
+    ```
+    * if you are authenticated & the current balance >= amount, the response will be in the following format:
+    ```
+    {
+        "operationType": "withdraw",
+        "operatedAmount": 100.0,
+        "currentBalance": 400.12
+    }
+    ```
+    * if the amount is null or zero or negative, response status will be 400 and an error message returned as response body
+    * if currentBalance < amount, response status will be 400 and an error message returned as response body
