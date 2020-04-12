@@ -16,3 +16,4 @@ Spring Boot based ATM API simulator.
 2. `cd simple-atm`
 3. `mvnw clean install`
 4. `mvnw spring-boot:run`
+5. the web app will start on `http://localhost:8080`
