@@ -10,4 +10,5 @@ import lombok.Data;
 @Data
 public class OperationPayload {
     private Double amount;
+    private String accessToken;
 }
