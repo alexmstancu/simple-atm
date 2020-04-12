@@ -28,7 +28,12 @@ The app exposes a REST endpoint for each of the 4 operations.
 6. lombok for getter/setters
 7. slf4j for logging (default configuration) 
 
-## Running the app (win 10)
+## Development setup
+1. win 10
+2. IntelliJ IDEA
+3. Postman
+
+## Starting the app (win 10)
 
 1. `git clone https://github.com/alexmstancu/simple-atm.git`
 2. `cd simple-atm`
@@ -36,7 +41,7 @@ The app exposes a REST endpoint for each of the 4 operations.
 4. `mvnw spring-boot:run`
 5. the web app will start on `http://localhost:8080/atm/userAccount`
 
-## Trying out the app
+## Playing with the app
 
 There are a few users accounts already setup into the DB. Use them to test the app.
 The app does not offer you a way to create/delete users, it relies on the idea they are already present, created by some other system/API beforehand. Here they are (this is actually the DB schema, sand the auto-generated id, which is not used in the app):
@@ -113,4 +118,24 @@ The REST endpoints will do different sorts of validation (such as checking if th
     ```
     * if the amount is invalid/accoutn does not exist/the user is not authenticated, error HTTP code & error messages will be returned
 
-It does not mimic real life that well, because it is some sort of a mix between an ATM (client) and a bank API (server). Normally this is how I image a correct flow: the ATM is a client which the user is using to make requests to the bank API server. But in my app, the ATM is also the API server.
+## Other details:
+* there is a single DB table called user_account with the following schema:
+```
+CREATE TABLE user_account (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  account_number VARCHAR(5) NOT NULL,
+  -- usually the pin (password) should hashed, but for simplicity it's plain text
+  pin VARCHAR(4) NOT NULL,
+  balance DOUBLE(15) NOT NULL
+);
+```
+* there is a single @RestController called ATMController
+* exception handling is done outside of the controller, in the RestControllerExceptionHandler which is annotated with @ControllerAdvice and contains @ExceptionHandler methods that handle each of the custom exception thrown by services
+* there are two @Services, one for authentication and one for user account operations (account details, withdraw, deposit)
+* there is a single @Repository which both services access; normally, the authentication credentials should be in a different DB table than the user bank account data, but for simplicity, I am using a single table which have both kind of data.
+* the authentication mechanism is implemented by hand because I wanted it to be simple; spring offers complex stuff which was not easily applicable (at least to me, as a spring novice)
+* there is javadoc for the most interesting parts
+* unit testing (with mocking) only for the BasicUserAccountService class
+* it does not mimic real life that well, because it is some sort of a mix between an ATM (client) and a bank API (server). Normally this is how I image a correct flow: the ATM is a client which the user is using to make requests to the bank API server. But in my app, the ATM is also the API server.
+* do check the console, log messages are printed for each of the beginning of operations, for the success or failure of them aswell.
