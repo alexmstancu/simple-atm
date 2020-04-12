@@ -37,11 +37,11 @@ The app exposes a REST endpoint for each of the 4 operations.
 ## Trying out the app
 
 There are a few users accounts already setup into the DB. Use them to test the app.
-The app does not offer you a way to create/delete users, it relies on the idea they are already present, created by some other system/API beforehand.
+The app does not offer you a way to create/delete users, it relies on the idea they are already present, created by some other system/API beforehand. Here they are:
 ```
-INSERT INTO user_account (name, account_number, pin, balance) VALUES
-  ('alex', '11111', '1234', 500.12),
-  ('george', '22222', '0000', 10000),
-  ('andreea', '33333', '8080', 2500),
-  ('alina', '55555', '5555', 3.14);
+   name,       account_number, pin,   balance)
+  ('alex',    '11111',        '1234', 500.12),
+  ('george',  '22222',        '0000', 10000),
+  ('andreea', '33333',        '8080', 2500),
+  ('alina',   '55555',        '5555', 3.14);
 ```
