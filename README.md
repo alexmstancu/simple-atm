@@ -48,7 +48,7 @@ The app does not offer you a way to create/delete users, it relies on the idea t
 The account_number is a string and the balance is a double.
 
 ### REST endpoints:
-1. POST `http://localhost:8080/atm/userAccount/auth`
+**POST** `http://localhost:8080/atm/userAccount/auth`
    * this will authenticate you as a user into the ATM system
    * you need to provide the credentials as a request body, for example, for the user 'alex':
    ```
@@ -61,3 +61,4 @@ The account_number is a string and the balance is a double.
    * if the account is existing & the pin is incorrect, the response body contains an error message and status code is 401 UNAUTHORIZED
    * if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
    * if the account is existing & the pin is correct, but you were already authenticated, the response body contains an error message and status code is 401 UNAUTHORIZED
+
