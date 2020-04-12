@@ -32,7 +32,7 @@ The app exposes a REST endpoint for each of the 4 operations.
 2. `cd simple-atm`
 3. `mvnw clean install`
 4. `mvnw spring-boot:run`
-5. the web app will start on `http://localhost:8080`
+5. the web app will start on `http://localhost:8080/atm/userAccount`
 
 ## Trying out the app
 
@@ -45,3 +45,19 @@ The app does not offer you a way to create/delete users, it relies on the idea t
   ('andreea', '33333',        '8080', 2500),
   ('alina',   '55555',        '5555', 3.14);
 ```
+The account_number is a string and the balance is a double.
+
+### REST endpoints:
+1. POST `http://localhost:8080/atm/userAccount/auth`
+   * this will authenticate you as a user into the ATM system
+   * you need to provide the credentials as a request body, for example, for the user 'alex':
+   ```
+   {
+	   "accountNumber": "11111",
+	   "pin": "1234"
+   }
+   ```
+   * if the account is existing & the pin is correct, the response body is empty and status code is 200 OK
+   * if the account is existing & the pin is incorrect, the response body contains an error message and status code is 401 UNAUTHORIZED
+   * if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
+   * if the account is existing & the pin is correct, but you were already authenticated, the response body contains an error message and status code is 401 UNAUTHORIZED
