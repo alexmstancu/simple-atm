@@ -22,7 +22,9 @@ public class BasicUserAuthenticationService implements UserAuthenticationService
         this.repository = repository;
     }
 
-    // this should probably return a token to be used for every request from now on
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void authenticate(String accountNumber, String pin) {
         if (authenticatedUsers.containsKey(accountNumber)) {
@@ -39,6 +41,9 @@ public class BasicUserAuthenticationService implements UserAuthenticationService
         authenticatedUsers.put(accountNumber, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void verifyUserIsAuthenticated(String accountNumber) {
         Boolean result = authenticatedUsers.get(accountNumber);
@@ -47,6 +52,9 @@ public class BasicUserAuthenticationService implements UserAuthenticationService
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deauthenticate(String accountNumber) {
         authenticatedUsers.remove(accountNumber);
