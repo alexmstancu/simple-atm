@@ -63,28 +63,28 @@ Note: The REST endpoints will do different sorts of validation (such as checking
    * you need to provide the credentials as URL query params; for example, for the 'alex' user:
    `http://localhost:8080/atm/userAccount/auth?accountNumber=11111&pin=1234`
    * possible responses:
-   * **200 OK** and **below response body** - this is for the happy path (the account is existing & the pin is correct)
+   * **200 OK** - this is for the happy path (the account is existing & the pin is correct), response body:
    ```
 	{
 		"operationType": "authentication",
 		"accountNumber": "11111"
 	}
 	```
-	* **401 UNAUTHORIZED** and **response body contains a meaningful error message** - if the account is existing & the pin is incorrect
+	* **401 UNAUTHORIZED** and - if the account is existing & the pin is incorrect, response body:
 	```
 	{
 		"error": "the pin was incorrect for the accountNumber: 11111",
 		"accountNumber": "11111"
 	}
 	```
-	* **401 UNAUTHORIZED** and **response body contains a meaningful error message** - if the account is existing & the pin is correct, but you were already authenticated
+	* **401 UNAUTHORIZED** - if the account is existing & the pin is correct, but you were already authenticated, response body:
 	```
 	{
 		"error": "user with account number is already authenticated: 11111",
 		"accountNumber": "11111"
 	}
 	```
-	* **404 NOT FOUND** and **response body contains a meaningful error message** - if the account is not existing
+	* **404 NOT FOUND** - if the account is not existing, response body:
 	```
 	{
 	    "error": "account number not found: 111111",
@@ -94,9 +94,11 @@ Note: The REST endpoints will do different sorts of validation (such as checking
 	* once you are authenticated, you will be further allowed to do a single operations out of the 3 remaining operations, after which you will not be authenticated any more. you will have to re-authenticate, by calling this endpoint again, if you want to make other operations.
 	* normally, the credentials should probably be sent through some HTML form, as request body, using HTTPS to encrypt the request body, but for the sake of simplicity... this app is simpler than that.
 2. Account details: **GET** `http://localhost:8080/atm/userAccount/details`
-	* note: you need to first authenticate in order to call this endpoint
-	* the account number must be present in the URL: `http://localhost:8080/atm/userAccount/details?accountNumber=11111`
-	* if you are authenticated, the response will be in the following format:
+	* note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED
+	* the account number and the amount must be present as URL query params: 
+	`http://localhost:8080/atm/userAccount/details?accountNumber=11111`
+	* possible responses:
+	* **200 OK** - this is for the happy path (if you are authenticated)
 	```
 	{
         "operationType": "accountDetails",
@@ -104,14 +106,21 @@ Note: The REST endpoints will do different sorts of validation (such as checking
         "accountNumber": "11111",
         "holderName": "alex"
 	}
-	``` 
+	```
+	* **401 UNAUTHORIZED** - if you previously did not authenticate, response body:
+	```
+	{
+		"error": "user for the following account is not authenticated: 11111",
+		"accountNumber": "11111"
+	}
+	```
 * if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
 3. Withdraw: **POST** `http://localhost:8080/atm/userAccount/withdraw`
-    * note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED with an error message in the response
+    * note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED
     * the account number and the amount must be present as URL query params:
     `http://localhost:8080/atm/userAccount/withdraw?accountNumber=11111&amount=100.12`
     * possible responses:
-	* **200 OK** and **below response body** - this is for the happy path (if you are authenticated & the current balance >= amount)
+	* **200 OK** - this is for the happy path (if you are authenticated & the current balance >= amount and amount > 0)
     ```
     {
         "operationType": "withdraw",
@@ -119,21 +128,21 @@ Note: The REST endpoints will do different sorts of validation (such as checking
         "currentBalance": 400.12
     }
     ```
-	* **401 UNAUTHORIZED** and **response body contains a meaningful error message** - if you previously did not authenticate
+	* **401 UNAUTHORIZED** - if you previously did not authenticate, response body:
 	```
 	{
 		"error": "user for the following account is not authenticated: 11111",
 		"accountNumber": "11111"
 	}
 	```
-	* **400 BAD REQUEST** and **response body contains a meaningful error message** - if currentBalance < amount
+	* **400 BAD REQUEST** - if currentBalance < amount, response body:
 	```
 	{
 		"error": "insufficient balance; current balance: 500.12, requested withdraw amount: 1000.0",
 		"accountNumber": "11111"
 	}
 	```
-	* **400 BAD REQUEST** and **response body contains a meaningful error message** - if the amount is null or zero or negative
+	* **400 BAD REQUEST** - if the amount is null or zero or negative, response body:
 	```
 	{
 		"error": "invalid amount, amount must not be null, nor less than or equal to 0; amount: -1000.0",
@@ -141,9 +150,10 @@ Note: The REST endpoints will do different sorts of validation (such as checking
 	}
 	```
 4. Deposit: **POST** http://localhost:8080/atm/userAccount/deposit`
-   * similar behavior to the 'withdraw' endpoint
-   * example request: `http://localhost:8080/atm/userAccount/deposit?accountNumber=11111&amount=45.32`
-   * if everything goes as expected, the response should be in the following format:
+   * similar behavior to the 'withdraw' endpoint (you have to authenticate first)
+   * example request (accountNumber & amount must be in the URL): 
+   `http://localhost:8080/atm/userAccount/deposit?accountNumber=11111&amount=45.32`
+   * if everything goes as expected, the response should be in the following format, together with **200 OK**:
    ```
     {
         "operationType": "deposit",
@@ -151,13 +161,13 @@ Note: The REST endpoints will do different sorts of validation (such as checking
         "currentBalance": 600.12
     }
     ```
-    * if the amount is invalid/accoutn does not exist/the user is not authenticated, error HTTP code & error messages will be returned
+	* possible responses: similar to withdraw opration, **but** you won't receive the **400 BAD REQUEST** any more if currentBalance < deposited amount.
 
 ## Other details:
 * there is a single DB table called user_account with the following schema:
 ```
 CREATE TABLE user_account (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY, -- this is not used in the app
   name VARCHAR(50) NOT NULL,
   account_number VARCHAR(5) NOT NULL,
   -- usually the pin (password) should hashed, but for simplicity it's plain text
@@ -167,11 +177,11 @@ CREATE TABLE user_account (
 ```
 * there is a single @RestController called ATMController
 * "auth", "withdraw" and "deposit" are POST requests because they modify/create resources on the server, while the the "details" endpoints is a GET because it is a *read* operation.
-* exception handling is done outside of the controller, in the RestControllerExceptionHandler which is annotated with @ControllerAdvice and contains @ExceptionHandler methods that handle each of the custom exception thrown by services
+* exception handling is done outside of the controller, in the RestControllerExceptionHandler which is annotated with @ControllerAdvice and contains @ExceptionHandler methods that handle each of the custom exceptions thrown by services
 * there are two @Services, one for authentication and one for user account operations (account details, withdraw, deposit)
-* there is a single @Repository which both services access; normally, the authentication credentials should be in a different DB table than the user bank account data, but for simplicity, I am using a single table which have both kind of data.
-* the authentication mechanism is implemented by hand because I wanted it to be simple; spring offers complex stuff which was not easily applicable (at least to me, as a spring novice)
+* there is a single @Repository which both services access; normally, the authentication credentials should be in a different DB table than the user bank account data, but for simplicity, I am using a single table which have both kinds of data.
+* the authentication mechanism is implemented by hand because I wanted it to be simple
 * there is javadoc for the most interesting parts
-* unit testing (with mocking) only for the BasicUserAccountService class
-* it does not mimic real life that well, because it is some sort of a mix between an ATM (client) and a bank API (server). Normally this is how I image a correct flow: the ATM is a client which the user is using to make requests to the bank API server. But in my app, the ATM is also the API server.
-* do check the console, log messages are printed for each of the beginning of operations, for the success or failure of them aswell.
+* unit testing (with mocking) only for the BasicUserAccountService class (other unit tests would be done in a similar way, testing all differnet inputs)
+* it does not mimic real life very well, because it is some sort of a mix between an ATM (client) and a bank API (server). In the real world, this is how I image a correct flow: the ATM is a client which the human user is using to make operations which are translated by the ATM into requests to the bank API server. But in my app, the ATM is also the API server.
+* log messages are printed for all operations, either successful or not, together with representative data that can help debugging 
