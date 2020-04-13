@@ -12,7 +12,7 @@ Simple ATM API with very simple authentication. There are 4 operations supported
 Operations 2, 3, 4 are not allowed to be carried out without first authenticating into the system.
 
 Once a user is authenticated, he is allowed to carry out a **single** operation out of the 3 aforementioned, after which
-he will be **'deauthenticated' automatically** (most ATMs work like that, or at least they did some time ago, they would allow to: enter the card -- which in our case, is simulated by the account number --, enter the pin, either see the balnce or withdraw and then they would throw the card out).
+he will be **'deauthenticated' automatically** (most ATMs work like that, or at least they did some time ago, they would allow to: enter the card -- which in our case, is simulated by the account number --, enter the pin, either see the balance or withdraw and then they would throw the card out).
 
 While a user is authenticated into the ATM with his accountNumber & pin, another user trying to authenticate
 with the same credentials will not be permitted. A single user of an account is allowed to be logged into the system.
