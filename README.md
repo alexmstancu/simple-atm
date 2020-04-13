@@ -60,15 +60,32 @@ The account_number is a string and the balance is a double. Mind the premise: th
 Note: The REST endpoints will do different sorts of validation (such as checking if the account number is existing in the DB before doing an operation, or if the amount to be withdraw is valid, or if the user is atuhenticated before doing an operation etc) and in case one of these validation rules is broken, an error HTTP status code will be returned together with a meaningful error message in the response body which states what was the problem with the request (e.g. for a "withdraw" request with an invalid amount, ```"error": "invalid amount, must be nonnull and strictly greater than 0"``` will be the response body. Also, for all such unsuccesful events, debug messages will be logged in the java app (as well as for successful events).
 
 1. Authentication: **POST** `http://localhost:8080/atm/userAccount/auth`
-   * this will authenticate you as a user into the ATM system
    * you need to provide the credentials as URL query params; for example, for the 'alex' user:
    `http://localhost:8080/atm/userAccount/auth?accountNumber=11111&pin=1234`
-   * if the account is existing & the pin is correct, the response body is empty and status code is 200 OK
-   * if the account is existing & the pin is incorrect, the response body contains an error message and status code is 401 UNAUTHORIZED
-   * if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
-   * if the account is existing & the pin is correct, but you were already authenticated, the response body contains an error message and status code is 401 UNAUTHORIZED
-   * once you are authenticated, you will be further allowed to do a single operations out of the 3 remaining operations, after which you will not be authenticated any more. you will have to re-authenticate, by calling this endpoint, if you want to make other operations.
-   * normally, the credentials should probably be sent through some HTML form, as request body, using HTTPS to encrypt the request body, but for the sake of simplicity... is simpler than that.
+   * possible responses:
+   * **200 OK** and **below response body** - this is for the happy path (the account is existing & the pin is correct)
+   ```
+	{
+		"operationType": "authentication",
+		"accountNumber": "11111"
+	}
+	```
+	* **401 UNAUTHORIZED** and **response body contains a meaningful error message** - if the account is existing & the pin is incorrect
+	```
+	{
+		"error": "the pin was incorrect for the accountNumber: 11111"
+	}
+	```
+	* **401 UNAUTHORIZED** and **response body contains a meaningful error message** - if the account is existing & the pin is correct, but you were already authenticated
+	```
+	{
+		"error": "user with account number is already authenticated: 11111"
+	}
+	```
+	* if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
+	* if the account is existing & the pin is correct, but you were already authenticated, the response body contains an error message and status code is 401 UNAUTHORIZED
+	* once you are authenticated, you will be further allowed to do a single operations out of the 3 remaining operations, after which you will not be authenticated any more. you will have to re-authenticate, by calling this endpoint, if you want to make other operations.
+	* normally, the credentials should probably be sent through some HTML form, as request body, using HTTPS to encrypt the request body, but for the sake of simplicity... is simpler than that.
 2. Account details: **GET** `http://localhost:8080/atm/userAccount/details`
 	* note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED with an error message in the response
 	* the account number must be present in the URL: `http://localhost:8080/atm/userAccount/details?accountNumber=11111`
