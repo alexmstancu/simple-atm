@@ -176,6 +176,7 @@ CREATE TABLE user_account (
 ```
 * there is a single @RestController called ATMController
 * "auth", "withdraw" and "deposit" are POST requests because they modify/create resources on the server, while the the "details" endpoints is a GET because it is a *read* operation.
+* you may be asking yourself why all the input data is sent via URL query params: for simplicity of interacting with the API and for the ease of testing it. in a real world, probably when you make a "deposit" request, you you send the amout and other data via reequest body
 * exception handling is done outside of the controller, in the RestControllerExceptionHandler which is annotated with @ControllerAdvice and contains @ExceptionHandler methods that handle each of the custom exceptions thrown by services
 * there are two @Services, one for authentication and one for user account operations (account details, withdraw, deposit)
 * there is a single @Repository which both services access; normally, the authentication credentials should be in a different DB table than the user bank account data, but for simplicity, I am using a single table which have both kinds of data.
