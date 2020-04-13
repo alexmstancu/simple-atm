@@ -3,11 +3,8 @@ package com.springboot.simpleatm.exception;
 import lombok.Getter;
 
 @Getter
-public class UserAccountNotFoundException extends RuntimeException {
-    private final String accountNumber;
-
+public class UserAccountNotFoundException extends UserAccountOperationException {
     public UserAccountNotFoundException(String accountNumber) {
-        super("account number: " + accountNumber);
-        this.accountNumber = accountNumber;
+        super(accountNumber, "account number not found: " + accountNumber);
     }
 }

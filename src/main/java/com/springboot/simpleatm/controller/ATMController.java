@@ -43,10 +43,15 @@ public class ATMController {
      * Authenticates the user into the ATM system by checking the validity of their credentials.
      */
     @PostMapping("/auth")
-    public void authenticate(@RequestParam String accountNumber, @RequestParam String pin) {
+    public OperationResult authenticate(@RequestParam String accountNumber, @RequestParam String pin) {
         logger.debug("Requesting authentication for account number {}", accountNumber);
         userAuthenticationService.authenticate(accountNumber, pin);
         logger.debug("Authentication grated for user account {}", accountNumber);
+
+        return OperationResult.builder()
+                .operationType(OperationType.authentication.name())
+                .accountNumber(accountNumber)
+                .build();
     }
 
     /**

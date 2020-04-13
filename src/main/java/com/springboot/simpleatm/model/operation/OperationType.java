@@ -6,6 +6,7 @@ import com.springboot.simpleatm.controller.ATMController;
  * The type of the operations carried out by the {@link ATMController} endpoint.
  */
 public enum OperationType {
+    authentication,
     accountDetails,
     deposit,
     withdraw

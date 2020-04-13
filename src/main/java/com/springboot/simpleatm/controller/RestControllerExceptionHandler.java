@@ -1,7 +1,6 @@
 package com.springboot.simpleatm.controller;
 
 import com.springboot.simpleatm.exception.*;
-import com.springboot.simpleatm.model.operation.OperationErrorMessage;
 import com.springboot.simpleatm.model.operation.OperationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,56 +15,34 @@ public class RestControllerExceptionHandler {
 
     @ExceptionHandler(UserAccountNotFoundException.class)
     public ResponseEntity<OperationResult> handleUserNotFound(UserAccountNotFoundException e) {
-        String accountNumber = e.getAccountNumber();
-
-        logger.error("Account number '{}' not found.", accountNumber, e);
-
-        OperationResult operationResult = OperationResult.builder()
-                .error(OperationErrorMessage.ACCOUNT_NOT_FOUND)
-                .accountNumber(accountNumber)
-                .build();
-
-        return new ResponseEntity<>(operationResult, HttpStatus.NOT_FOUND);
+        logger.error("Account number '{}' was not found in the system for the requested operation.", e.getAccountNumber(), e);
+        return buildErrorResult(e, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidAmountException.class)
     public ResponseEntity<OperationResult> handleInvalidAmount(InvalidAmountException e) {
-        Double amount = e.getAmount();
-
-        logger.error("Invalid amount '{}' for the requested operation.", amount, e);
-
-        OperationResult operationResult = OperationResult.builder()
-                .error(OperationErrorMessage.INVALID_AMOUNT)
-                .operatedAmount(amount)
-                .build();
-
-        return new ResponseEntity<>(operationResult, HttpStatus.BAD_REQUEST);
+        logger.error("Invalid amount for the requested operation for accountNumber {}.", e.getAccountNumber(), e);
+        return buildErrorResult(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InsufficientBalanceException.class)
     public ResponseEntity<OperationResult> handleInsufficientBalance(InsufficientBalanceException e) {
-        Double amount = e.getAmount();
-        Double currentBalance = e.getCurrentBalance();
-
-        logger.error("Balance {} insufficient for the requested operation with amount {}.", currentBalance, amount, e);
-
-        OperationResult operationResult = OperationResult.builder()
-                .error(OperationErrorMessage.INSUFFICIENT_BALANCE)
-                .operatedAmount(amount)
-                .currentBalance(currentBalance)
-                .build();
-
-        return new ResponseEntity<>(operationResult, HttpStatus.BAD_REQUEST);
+        logger.error("Balance insufficient for the requested operation for account {}.", e.getAccountNumber(), e);
+        return buildErrorResult(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({UserAlreadyAuthenticatedException.class, UserAccountPinIncorrectException.class, UserUnauthenticatedException.class})
-    public ResponseEntity<OperationResult> handleSecurity(RuntimeException e) {
-        logger.error("User could not be authenticated for the requested operation: ", e);
+    public ResponseEntity<OperationResult> handleSecurity(UserAccountOperationException e) {
+        logger.error("User for account number {} could not be authenticated for the requested operation: ", e.getAccountNumber(), e);
+        return buildErrorResult(e, HttpStatus.UNAUTHORIZED);
+    }
 
+    private ResponseEntity<OperationResult> buildErrorResult(UserAccountOperationException e, HttpStatus status) {
         OperationResult operationResult = OperationResult.builder()
                 .error(e.getMessage())
+                .accountNumber(e.getAccountNumber())
                 .build();
 
-        return new ResponseEntity<>(operationResult, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(operationResult, status);
     }
 }

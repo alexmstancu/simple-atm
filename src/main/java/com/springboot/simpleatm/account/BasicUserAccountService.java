@@ -32,7 +32,7 @@ public class BasicUserAccountService implements UserAccountService {
      */
     @Override
     public UserAccount deposit(String accountNumber, Double amount) throws UserAccountNotFoundException, InvalidAmountException {
-        validateAmount(amount);
+        validateAmount(accountNumber, amount);
         UserAccount userAccount = findAccountByNumber(accountNumber);
         Double newBalance = userAccount.getBalance() + amount;
         updateBalance(userAccount, newBalance);
@@ -44,11 +44,11 @@ public class BasicUserAccountService implements UserAccountService {
      */
     @Override
     public UserAccount withdraw(String accountNumber, Double amount) throws UserAccountNotFoundException, InvalidAmountException, InsufficientBalanceException {
-        validateAmount(amount);
+        validateAmount(accountNumber, amount);
         UserAccount userAccount = findAccountByNumber(accountNumber);
         Double currentBalance = userAccount.getBalance();
         if (currentBalance < amount) {
-            throw new InsufficientBalanceException(currentBalance, amount);
+            throw new InsufficientBalanceException(accountNumber, currentBalance, amount);
         }
         Double newBalance = currentBalance - amount;
         updateBalance(userAccount, newBalance);
@@ -66,9 +66,9 @@ public class BasicUserAccountService implements UserAccountService {
         userAccountRepository.save(userAccount);
     }
 
-    private void validateAmount(Double amount) throws InvalidAmountException {
+    private void validateAmount(String accountNumber, Double amount) throws InvalidAmountException {
         if (amount == null || amount <= 0) {
-            throw new InvalidAmountException(amount);
+            throw new InvalidAmountException(accountNumber, amount);
         }
     }
 }
