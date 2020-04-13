@@ -82,10 +82,9 @@ Note: The REST endpoints will do different sorts of validation (such as checking
 		"error": "user with account number is already authenticated: 11111"
 	}
 	```
-	* if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
-	* if the account is existing & the pin is correct, but you were already authenticated, the response body contains an error message and status code is 401 UNAUTHORIZED
-	* once you are authenticated, you will be further allowed to do a single operations out of the 3 remaining operations, after which you will not be authenticated any more. you will have to re-authenticate, by calling this endpoint, if you want to make other operations.
-	* normally, the credentials should probably be sent through some HTML form, as request body, using HTTPS to encrypt the request body, but for the sake of simplicity... is simpler than that.
+	* **404 NOT FOUND* and **response body contains a meaningful error message** - if the account is not existing TODO
+	* once you are authenticated, you will be further allowed to do a single operations out of the 3 remaining operations, after which you will not be authenticated any more. you will have to re-authenticate, by calling this endpoint again, if you want to make other operations.
+	* normally, the credentials should probably be sent through some HTML form, as request body, using HTTPS to encrypt the request body, but for the sake of simplicity... this app is simpler than that.
 2. Account details: **GET** `http://localhost:8080/atm/userAccount/details`
 	* note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED with an error message in the response
 	* the account number must be present in the URL: `http://localhost:8080/atm/userAccount/details?accountNumber=11111`
