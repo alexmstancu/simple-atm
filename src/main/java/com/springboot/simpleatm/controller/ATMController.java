@@ -2,10 +2,8 @@ package com.springboot.simpleatm.controller;
 
 import com.springboot.simpleatm.account.UserAccountService;
 import com.springboot.simpleatm.model.UserAccount;
-import com.springboot.simpleatm.model.operation.OperationPayload;
 import com.springboot.simpleatm.model.operation.OperationResult;
 import com.springboot.simpleatm.model.operation.OperationType;
-import com.springboot.simpleatm.model.security.Credentials;
 import com.springboot.simpleatm.security.UserAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +43,9 @@ public class ATMController {
      * Authenticates the user into the ATM system by checking the validity of their credentials.
      */
     @PostMapping("/auth")
-    public void authenticate(@RequestBody Credentials credentials) {
-        String accountNumber = credentials.getAccountNumber();
+    public void authenticate(@RequestParam String accountNumber, @RequestParam String pin) {
         logger.debug("Requesting authentication for account number {}", accountNumber);
-        userAuthenticationService.authenticate(accountNumber, credentials.getPin());
+        userAuthenticationService.authenticate(accountNumber, pin);
         logger.debug("Authentication grated for user account {}", accountNumber);
     }
 
@@ -56,8 +53,8 @@ public class ATMController {
      * If the user is authenticated, will fetch his account's details and 'deauthenticate' him.
      * Otherwise, he will not be allowed to carry out the operation.
      */
-    @GetMapping("/{accountNumber}/details")
-    public OperationResult getAccountDetails(@PathVariable String accountNumber) {
+    @GetMapping("/details")
+    public OperationResult getAccountDetails(@RequestParam String accountNumber) {
         logger.debug("Requesting account details for account number {}", accountNumber);
 
         verifyUserIsAuthenticated(accountNumber);
@@ -79,9 +76,8 @@ public class ATMController {
      * If the user is authenticated, will withdraw the given amount from his account and 'deauthenticate' him.
      * Otherwise, he will not be allowed to carry out the operation.
      */
-    @PostMapping("/{accountNumber}/withdraw")
-    public OperationResult withdraw(@PathVariable String accountNumber, @RequestBody OperationPayload payload) {
-        Double amount = payload.getAmount();
+    @PostMapping("/withdraw")
+    public OperationResult withdraw(@RequestParam String accountNumber, @RequestParam Double amount) {
         logger.debug("Requesting withdrawal with amount {} for account number {}", amount, accountNumber);
 
         verifyUserIsAuthenticated(accountNumber);
@@ -102,9 +98,8 @@ public class ATMController {
      * If the user is authenticated, will deposit the given amount into his account and 'deauthenticate' him.
      * Otherwise, he will not be allowed to carry out the operation.
      */
-    @PostMapping("/{accountNumber}/deposit")
-    public OperationResult deposit(@PathVariable String accountNumber, @RequestBody OperationPayload payload) {
-        Double amount = payload.getAmount();
+    @PostMapping("/deposit")
+    public OperationResult deposit(@RequestParam String accountNumber, @RequestParam Double amount) {
         logger.debug("Requesting deposit with amount {} for account number {}", amount, accountNumber);
 
         verifyUserIsAuthenticated(accountNumber);
