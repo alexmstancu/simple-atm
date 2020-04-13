@@ -148,7 +148,7 @@ Note: The REST endpoints will do different sorts of validation (such as checking
 		"accountNumber": "11111"
 	}
 	```
-4. Deposit: **POST** http://localhost:8080/atm/userAccount/deposit`
+4. Deposit: **POST** `http://localhost:8080/atm/userAccount/deposit`
    * similar behavior to the 'withdraw' endpoint (you have to authenticate first)
    * example request (accountNumber & amount must be in the URL): 
    `http://localhost:8080/atm/userAccount/deposit?accountNumber=11111&amount=45.32`
