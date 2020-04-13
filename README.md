@@ -114,7 +114,6 @@ Note: The REST endpoints will do different sorts of validation (such as checking
 		"accountNumber": "11111"
 	}
 	```
-* if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
 3. Withdraw: **POST** `http://localhost:8080/atm/userAccount/withdraw`
     * note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED
     * the account number and the amount must be present as URL query params:
