@@ -185,3 +185,5 @@ CREATE TABLE user_account (
 * unit testing (with mocking) only for the BasicUserAccountService class (other unit tests would be done in a similar way, testing all differnet inputs)
 * it does not mimic real life very well, because it is some sort of a mix between an ATM (client) and a bank API (server). In the real world, this is how I image a correct flow: the ATM is a client which the human user is using to make operations which are translated by the ATM into requests to the bank API server. But in my app, the ATM is also the API server.
 * log messages are printed for all operations, either successful or not, together with representative data that can help debugging 
+* don't modify the DB script to have negative values for balance, or to have identical account numbers for multiple accounts, or other hacks like that, the app is not prepared for this kind of shock :)
+* thanks for reading all this, it was a long text for a little app
