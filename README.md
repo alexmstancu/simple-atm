@@ -73,20 +73,28 @@ Note: The REST endpoints will do different sorts of validation (such as checking
 	* **401 UNAUTHORIZED** and **response body contains a meaningful error message** - if the account is existing & the pin is incorrect
 	```
 	{
-		"error": "the pin was incorrect for the accountNumber: 11111"
+		"error": "the pin was incorrect for the accountNumber: 11111",
+		"accountNumber": "11111"
 	}
 	```
 	* **401 UNAUTHORIZED** and **response body contains a meaningful error message** - if the account is existing & the pin is correct, but you were already authenticated
 	```
 	{
-		"error": "user with account number is already authenticated: 11111"
+		"error": "user with account number is already authenticated: 11111",
+		"accountNumber": "11111"
 	}
 	```
-	* **404 NOT FOUND* and **response body contains a meaningful error message** - if the account is not existing TODO
+	* **404 NOT FOUND** and **response body contains a meaningful error message** - if the account is not existing
+	```
+	{
+	    "error": "account number not found: 111111",
+	    "accountNumber": "111111"
+	}
+	```
 	* once you are authenticated, you will be further allowed to do a single operations out of the 3 remaining operations, after which you will not be authenticated any more. you will have to re-authenticate, by calling this endpoint again, if you want to make other operations.
 	* normally, the credentials should probably be sent through some HTML form, as request body, using HTTPS to encrypt the request body, but for the sake of simplicity... this app is simpler than that.
 2. Account details: **GET** `http://localhost:8080/atm/userAccount/details`
-	* note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED with an error message in the response
+	* note: you need to first authenticate in order to call this endpoint
 	* the account number must be present in the URL: `http://localhost:8080/atm/userAccount/details?accountNumber=11111`
 	* if you are authenticated, the response will be in the following format:
 	```
@@ -97,12 +105,13 @@ Note: The REST endpoints will do different sorts of validation (such as checking
         "holderName": "alex"
 	}
 	``` 
-    * if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
+* if the account is not existing, the response body will contain an error message and status code is 404 NOT FOUND
 3. Withdraw: **POST** `http://localhost:8080/atm/userAccount/withdraw`
     * note: you need to first authenticate in order to call this endpoint, otherwise you get 401 UNAUTHORIZED with an error message in the response
     * the account number and the amount must be present as URL query params:
     `http://localhost:8080/atm/userAccount/withdraw?accountNumber=11111&amount=100.12`
-    * if you are authenticated & the current balance >= amount, the response will be in the following format:
+    * possible responses:
+	* **200 OK** and **below response body** - this is for the happy path (if you are authenticated & the current balance >= amount)
     ```
     {
         "operationType": "withdraw",
@@ -110,8 +119,27 @@ Note: The REST endpoints will do different sorts of validation (such as checking
         "currentBalance": 400.12
     }
     ```
-    * if the amount is null or zero or negative, response status will be 400 and an error message returned as response body
-    * if currentBalance < amount, response status will be 400 and an error message returned as response body
+	* **401 UNAUTHORIZED** and **response body contains a meaningful error message** - if you previously did not authenticate
+	```
+	{
+		"error": "user for the following account is not authenticated: 11111",
+		"accountNumber": "11111"
+	}
+	```
+	* **400 BAD REQUEST** and **response body contains a meaningful error message** - if currentBalance < amount
+	```
+	{
+		"error": "insufficient balance; current balance: 500.12, requested withdraw amount: 1000.0",
+		"accountNumber": "11111"
+	}
+	```
+	* **400 BAD REQUEST** and **response body contains a meaningful error message** - if the amount is null or zero or negative
+	```
+	{
+		"error": "invalid amount, amount must not be null, nor less than or equal to 0; amount: -1000.0",
+		"accountNumber": "11111"
+	}
+	```
 4. Deposit: **POST** http://localhost:8080/atm/userAccount/deposit`
    * similar behavior to the 'withdraw' endpoint
    * example request: `http://localhost:8080/atm/userAccount/deposit?accountNumber=11111&amount=45.32`
