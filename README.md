@@ -38,7 +38,7 @@ The app exposes a REST endpoint for each of the 4 operations, which will be deta
 
 1. `git clone https://github.com/alexmstancu/simple-atm.git`
 2. `cd simple-atm`
-3. `mvnw clean install'
+3. `mvnw clean install`
 4. `mvnw spring-boot:run` or 
 5. the web app will start on `http://localhost:8080/atm/userAccount`
 
